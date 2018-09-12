@@ -1,0 +1,32 @@
+version: "3"
+
+services:
+  mysql:
+    image: mysql:5.7.19
+    volumes:
+      - wpdb1:/var/lib/mysql
+    ports:
+      - 3307:3306
+    networks:
+      - internal
+    environment:
+      - "MYSQL_ROOT_PASSWORD=password"
+  wordpress:
+    image: wordpress
+    networks:
+      - traefik
+      - internal
+    deploy:
+      labels:
+        - "traefik.frontend.rule=Host:wp1.localhost"
+        - "traefik.port=80"
+    volumes:
+      - /Users/econcepcion/sites/DOCKER_SITES/Wordpress1:/var/www/html
+
+networks:
+  traefik:
+    external: yes
+  internal:
+    
+volumes:
+  wpdb1:
